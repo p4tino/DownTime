@@ -5,7 +5,8 @@
 import sys
 import argparse
 
-def main():
+
+def get_options():
     parser = argparse.ArgumentParser(
         description="countdown timer script which reads a date file and "
             "reports time before and after those dates")
@@ -30,7 +31,11 @@ def main():
             "regarding file parsing errors",
         action="store_true")
     args = parser.parse_args()
+    
+    return args
 
+def main():
+    options = get_options()
 
 if __name__ == "__main__":
     sys.exit(main())

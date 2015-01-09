@@ -18,10 +18,9 @@ def read_file(path):
         entry = entry.strip()
         entry = entry.split(',')    
         split_date = entry[0].split('/')
-        print split_date
         entry_date = date(int(split_date[2]), int(split_date[0]), 
                 int(split_date[1]))
-        entry[0] = split_date
+        entry[0] = entry_date
                 
         parsed_entries.append(entry)
 
@@ -55,9 +54,20 @@ def get_options():
     
     return args
 
+def sort_entries(entries, reverse):
+    if reverse:
+        return sorted(entries, key=lambda entry: entry[0], reverse=True) 
+
+    return sorted(entries, key=lambda entry: entry[0])
+
 def main():
     args = get_options()
     entries = read_file(args.file)
+    if args.sort or args.reverse:
+        entries = sort_entries(entries, args.reverse)
+
+    for entry in entries:
+        print entry
 
 if __name__ == "__main__":
     sys.exit(main())

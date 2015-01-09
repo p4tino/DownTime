@@ -4,7 +4,28 @@
 
 import sys
 import argparse
+import time
+from datetime import date
 
+def read_file(path):
+    entries = []
+    with open(path) as f:
+        entries = f.readlines()
+    
+    parsed_entries = []
+
+    for entry in entries:
+        entry = entry.strip()
+        entry = entry.split(',')    
+        split_date = entry[0].split('/')
+        print split_date
+        entry_date = date(int(split_date[2]), int(split_date[0]), 
+                int(split_date[1]))
+        entry[0] = split_date
+                
+        parsed_entries.append(entry)
+
+    return parsed_entries
 
 def get_options():
     parser = argparse.ArgumentParser(
@@ -35,7 +56,8 @@ def get_options():
     return args
 
 def main():
-    options = get_options()
+    args = get_options()
+    entries = read_file(args.file)
 
 if __name__ == "__main__":
     sys.exit(main())

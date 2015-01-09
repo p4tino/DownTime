@@ -60,13 +60,39 @@ def sort_entries(entries, reverse):
 
     return sorted(entries, key=lambda entry: entry[0])
 
+def process_entries(entries, reference_date):
+    processed_entries = []
+    
+    for entry in entries:
+        days_diff = entry[0] - reference_date
+        result_string = entry[1] + ":\n\t" + str(abs(days_diff.days)) + ' days'
+        
+        if days_diff.days < 0:
+            result_string = result_string + ' ago'
+        elif days_diff.days == 0:
+            result_string = result_string + ', today!'
+
+        weeks = abs(days_diff.days) / 7
+        weekdays = abs(days_diff.days) % 7
+
+        result_string = result_string + "\n\t" + str(weeks) + ' weeks, ' + str(weekdays) + ' days'
+        
+        if days_diff.days < 0:
+            result_string = result_string + ' ago' 
+
+        processed_entries.append(result_string)
+
+    return processed_entries
+
 def main():
     args = get_options()
     entries = read_file(args.file)
     if args.sort or args.reverse:
         entries = sort_entries(entries, args.reverse)
 
-    for entry in entries:
+    processed_entries = process_entries(entries, date.today())
+
+    for entry in processed_entries:
         print entry
 
 if __name__ == "__main__":
